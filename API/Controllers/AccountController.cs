@@ -29,19 +29,27 @@ namespace API.Controllers
         {
             try
             {
-                var hmac = new HMACSHA512();
+
                 var userDetail = await _dataContext.Users.SingleOrDefaultAsync(
                     user => user.UserName.Equals(register.Username)
                     );
 
-                if (userDetail is null) return BadRequest("Please enter valid username.");
+                if (userDetail is null) return Unauthorized("Please enter valid username.");
+
+                var hmac = new HMACSHA512(userDetail.PasswordSalt);
 
                 var hashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password));
 
-                if (userDetail.UserName.Equals(register.Username) && hashPassword.Equals(register.Username))
-                    return Ok(new { Message = "Congratulations !! you are able to login.", Data = userDetail });
+                //if (userDetail.UserName.Equals(register.Username) && hashPassword.Equals(register.Username))
+                // return Ok(new { Message = "Congratulations !! you are able to login.", Data = userDetail });
 
-                return Ok(new AppUser());
+                for (int i = 0; i < hashPassword.Length - 1; i++)
+                {
+                    if (hashPassword[i] != userDetail.PasswordHash[i])
+                        return Unauthorized("Please enter valid password");
+                }
+
+                return Ok(userDetail);
             }
             catch (Exception ex)
             {

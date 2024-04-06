@@ -22,7 +22,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors();
+//builder.Services.AddCors();
+
+string  MyAllowOrigins = string.Empty;
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowOrigins,
+        builder =>
+        {
+            builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+        });
+});
 
 //Added the databse configuration for EF core
 builder.Services.AddDbContext<DataContext>(options =>
@@ -45,7 +56,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 //app.UseCors(x=>x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
-app.UseCors(x=>x.AllowAnyOrigin());
+app.UseCors(MyAllowOrigins);
 
 app.UseAuthorization();
 

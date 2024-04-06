@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,7 @@ namespace API.Controllers
            try
             {
                 var users = await _dataContext.Users.ToListAsync();
-                return Ok(new {users}) ;
+                return Ok(new {Data = users}) ;
             }
             catch (Exception ex)
             {
