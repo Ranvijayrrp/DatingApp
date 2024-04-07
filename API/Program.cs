@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Extentions;
 using API.Implementations;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,28 +42,11 @@ builder.Services.AddCors(options =>
         });
 });
 
-//adding authorization
+//custom services added here
+builder.Services.AddApplicationService(configuration);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(Options =>
-   Options.TokenValidationParameters = new TokenValidationParameters
-   {
-      ValidateIssuerSigningKey = true,
-      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.
-      GetBytes(configuration.GetSection("TokenKey").Value)),
-      ValidateIssuer = false,
-      ValidateAudience = false
-   }
-);
-
-//Added the databse configuration for EF core
-builder.Services.AddDbContext<DataContext>(options =>
-{
-  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-//DI for class 
-builder.Services.AddScoped<ITokenService, TokenService>();
+//added custom authentication
+builder.Services.AddIdentityService(configuration);
 
 var app = builder.Build();
 
