@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,12 @@ namespace API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly DataContext _dataContext;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(DataContext dataContext)
+        public AccountController(DataContext dataContext, ITokenService tokenService)
         {
             _dataContext = dataContext;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -46,7 +49,9 @@ namespace API.Controllers
                         return Unauthorized("Please enter valid password");
                 }
 
-                return Ok(new {Message = $"Conguratulations {loginDto.Username} !! you are login", Data = userDetail});
+                UserDto userDto = CreateTokenAndReturn(userDetail);
+
+                return Ok(new { Message = $"Conguratulations {userDto.Username} !! you are login", Data = userDto });
             }
             catch (Exception ex)
             {
@@ -55,8 +60,17 @@ namespace API.Controllers
             }
         }
 
+        private UserDto CreateTokenAndReturn(AppUser userDetail)
+        {
+            return new UserDto
+            {
+                Username = userDetail.UserName,
+                Token = _tokenService.CreateToken(userDetail),
+            };
+        }
+
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             try
             {
@@ -83,7 +97,10 @@ namespace API.Controllers
 
                 _dataContext.Users.Add(user);
                 await _dataContext.SaveChangesAsync();
-                return Ok(new { UserDetails = user, Message = $"User : {registerDto.Username} registered successfully," });
+
+                var userDto = CreateTokenAndReturn(user);
+
+                return Ok(new { UserDetails = userDto, Message = $"User : {userDto.Username} registered successfully," });
             }
             catch (Exception ex)
             {

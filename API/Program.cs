@@ -1,5 +1,11 @@
+using System.Text;
 using API.Data;
+using API.Implementations;
+using API.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +41,28 @@ builder.Services.AddCors(options =>
         });
 });
 
+//adding authorization
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(Options =>
+   Options.TokenValidationParameters = new TokenValidationParameters
+   {
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.
+      GetBytes(configuration.GetSection("TokenKey").Value)),
+      ValidateIssuer = false,
+      ValidateAudience = false
+   }
+);
+
 //Added the databse configuration for EF core
 builder.Services.AddDbContext<DataContext>(options =>
 {
   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//DI for class 
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
@@ -57,6 +79,8 @@ app.UseRouting();
 
 //app.UseCors(x=>x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
 app.UseCors(MyAllowOrigins);
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
