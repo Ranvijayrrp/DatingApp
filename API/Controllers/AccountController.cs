@@ -25,23 +25,20 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> Login(RegisterDto register)
+        public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
         {
             try
             {
 
                 var userDetail = await _dataContext.Users.SingleOrDefaultAsync(
-                    user => user.UserName.Equals(register.Username)
+                    user => user.UserName.Equals(loginDto.Username)
                     );
 
                 if (userDetail is null) return Unauthorized("Please enter valid username.");
 
                 var hmac = new HMACSHA512(userDetail.PasswordSalt);
 
-                var hashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.Password));
-
-                //if (userDetail.UserName.Equals(register.Username) && hashPassword.Equals(register.Username))
-                // return Ok(new { Message = "Congratulations !! you are able to login.", Data = userDetail });
+                var hashPassword = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
 
                 for (int i = 0; i < hashPassword.Length - 1; i++)
                 {
@@ -49,7 +46,7 @@ namespace API.Controllers
                         return Unauthorized("Please enter valid password");
                 }
 
-                return Ok(userDetail);
+                return Ok(new {Message = $"Conguratulations {loginDto.Username} !! you are login", Data = userDetail});
             }
             catch (Exception ex)
             {

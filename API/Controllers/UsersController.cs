@@ -27,7 +27,8 @@ namespace API.Controllers
            try
             {
                 var users = await _dataContext.Users.ToListAsync();
-                return Ok(new {Data = users}) ;
+                //return users;
+                return Ok(new { Data = users });
             }
             catch (Exception ex)
             {
