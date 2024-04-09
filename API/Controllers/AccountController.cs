@@ -51,7 +51,8 @@ namespace API.Controllers
 
                 UserDto userDto = CreateTokenAndReturn(userDetail);
 
-                return Ok(new { Message = $"Conguratulations {userDto.Username} !! you are login", Data = userDto });
+                //return Ok(new { Message = $"Conguratulations {userDto.Username} !! you are login", Data = userDto });
+                return Ok(userDto);
             }
             catch (Exception ex)
             {
