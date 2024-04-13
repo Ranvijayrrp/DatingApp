@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit{
   registerMode = false;
   users : any;
 
-  constructor(private http:HttpClient){
+  constructor(){
 
   };
 
@@ -22,19 +22,16 @@ export class HomeComponent implements OnInit{
    this.registerMode = !this.registerMode;
   }
 
-  getUserDemo(){
-    this.http.get('https://localhost:7001/api/users').subscribe(user=> this.users = user);
-  }
 
-  getUser(){
-    this.http.get('https://localhost:7001/api/users').subscribe({
-      next: (response) => {
-        this.users = response;
-      },
-      error: (e) => console.error(e),
-      complete: () => console.info('getting user details completed') 
-      });
-  };
+  // getUser(){
+  //   this.http.get('https://localhost:7001/api/users').subscribe({
+  //     next: (response) => {
+  //       this.users = response;
+  //     },
+  //     error: (e) => console.error(e),
+  //     complete: () => console.info('getting user details completed') 
+  //     });
+  // };
 
   cancelRegisterMode(event : boolean){
     this.registerMode = event;

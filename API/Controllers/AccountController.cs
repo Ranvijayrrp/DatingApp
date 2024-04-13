@@ -79,14 +79,14 @@ namespace API.Controllers
                 ||
                 (
                     registerDto is not null
-                    && (registerDto.Username is null
-                    || registerDto.Password is null)
+                    && (string.IsNullOrWhiteSpace(registerDto.Username)
+                    || string.IsNullOrWhiteSpace (registerDto.Password) )
 
                 )) return BadRequest(new { Message = $"Please enter correct username and password" });
 
 
                 if (await UserExists(registerDto.Username))
-                    return BadRequest("User already exists.");
+                    return BadRequest(new { Message = "User already exists." });
 
                 using var hmac = new HMACSHA512();
                 var user = new AppUser()
@@ -101,7 +101,8 @@ namespace API.Controllers
 
                 var userDto = CreateTokenAndReturn(user);
 
-                return Ok(new { UserDetails = userDto, Message = $"User : {userDto.Username} registered successfully," });
+                return Ok(userDto);
+                //return Ok(new { UserDetails = userDto, Message = $"User : {userDto.Username} registered successfully," });
             }
             catch (Exception ex)
             {
