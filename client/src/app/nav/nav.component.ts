@@ -35,11 +35,11 @@ export class NavComponent implements OnInit {
         console.log(this.accountService.currentUser$);
         //console.log(this.accountService.currentUser$);  //testing purspose
       },
-      error: (e) => {
-        console.log(e)
-        this.toastr.error(e.error)
+      // error: (e) => {
+      //   console.log(e)
+      //   this.toastr.error(e.error)
         
-      },
+      // },
       complete: () => console.info("Login call completed")
     });
     //console.log(this.model);

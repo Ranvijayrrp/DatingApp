@@ -3,6 +3,7 @@ using API.Data;
 using API.Extentions;
 using API.Implementations;
 using API.Interfaces;
+using API.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -55,6 +56,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseMiddleware<ExceptionMiddleware>();
 }
 
 app.UseHttpsRedirection();
