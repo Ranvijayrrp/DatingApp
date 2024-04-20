@@ -1,0 +1,70 @@
+[
+    {
+        "UserName": "john_doe",
+        "DateOfBirth": "1990-01-01",
+        "KnownAs": "John",
+        "Gender": "Male",
+        "Introduction": "Hello, I'm John!",
+        "LookingFor": "Friendship",
+        "Interests": "Coding, hiking",
+        "City": "Seattle",
+        "Country": "United States",
+        "Photos": [
+            {
+                "Url": "https://example.com/john_profile.jpg",
+                "IsMain": true
+            }
+        ]
+    },
+    {
+        "UserName": "Gaurav",
+        "DateOfBirth": "1997-01-01",
+        "KnownAs": "Gaurav",
+        "Gender": "Male",
+        "Introduction": "Hello, I'm Gaurav!",
+        "LookingFor": "Friendship",
+        "Interests": "Coding, hiking",
+        "City": "Delhi",
+        "Country": "India",
+        "Photos": [
+            {
+                "Url": "https://example.com/john_profile.jpg",
+                "IsMain": true
+            }
+        ]
+    },
+    {
+        "UserName": "jane_smith",
+        "DateOfBirth": "1995-03-15",
+        "KnownAs": "Jane",
+        "Gender": "Female",
+        "Introduction": "Hi, I'm Jane!",
+        "LookingFor": "Dating",
+        "Interests": "Photography, cooking",
+        "City": "Los Angeles",
+        "Country": "United States",
+        "Photos": [
+            {
+                "Url": "https://example.com/jane_profile.jpg",
+                "IsMain": true
+            }
+        ]
+    },
+    {
+        "UserName": "Khushi",
+        "DateOfBirth": "1999-03-15",
+        "KnownAs": "Khusi",
+        "Gender": "Female",
+        "Introduction": "Hi, I'm Khusi!",
+        "LookingFor": "Dating",
+        "Interests": "Photography, cooking",
+        "City": "Los Angeles",
+        "Country": "United States",
+        "Photos": [
+            {
+                "Url": "https://example.com/jane_profile.jpg",
+                "IsMain": true
+            }
+        ]
+    }
+]

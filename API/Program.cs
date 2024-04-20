@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using API.Data;
 using API.Extentions;
 using API.Implementations;
@@ -21,6 +22,8 @@ var configuration = builder.Configuration //new ConfigurationBuilder()
 var appUrl = configuration["profiles:https:applicationUrl"];
 builder.WebHost.UseUrls(appUrl);
 
+
+
 //configuration to run using HTTPS end
 
 // Add services to the container.
@@ -32,7 +35,7 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddCors();
 
-string  MyAllowOrigins = string.Empty;
+string MyAllowOrigins = string.Empty;
 
 builder.Services.AddCors(options =>
 {
@@ -50,6 +53,25 @@ builder.Services.AddApplicationService(configuration);
 builder.Services.AddIdentityService(configuration);
 
 var app = builder.Build();
+
+
+//add migrations and seed data start //
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var logger = services.GetRequiredService<ILogger<Program>>();
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUser(context, logger);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "An error occured");
+}
+
+//add migrations and seed data end //
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
