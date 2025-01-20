@@ -26,7 +26,7 @@ namespace API.Implementations
         public async Task<MemberDto> GetMemberAsync(string username)
         {
            return await _context.Users
-                   .Where(x=>x.UserName.Equals(username))
+                   .Where(x=>x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase))
                    .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                    .SingleOrDefaultAsync();
         }

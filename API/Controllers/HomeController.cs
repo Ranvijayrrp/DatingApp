@@ -20,15 +20,17 @@ namespace API.Controllers
             try
             {
                 var users = await _data.Users.ToListAsync();
-                return Ok(new {users}) ;
+                return Ok(new { users });
             }
             catch (Exception ex)
             {
                 return StatusCode(500,
-                new {Message = "Error while getting the users detail",
-                Error = ex.Message
+                new
+                {
+                    Message = "Error while getting the users detail",
+                    Error = ex.Message
                 });
             }
-        }       
+        }
     }
 }

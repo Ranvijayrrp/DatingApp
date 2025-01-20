@@ -8,7 +8,6 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +48,11 @@ namespace API.Controllers
                         return Unauthorized("Please enter valid password");
                 }
 
+                if (!hashPassword.SequenceEqual(userDetail.PasswordHash))
+                {
+                    return Unauthorized("Please enter valid password");
+                }
+
                 UserDto userDto = CreateTokenAndReturn(userDetail);
 
                 //return Ok(new { Message = $"Conguratulations {userDto.Username} !! you are login", Data = userDto });
@@ -80,7 +84,7 @@ namespace API.Controllers
                 (
                     registerDto is not null
                     && (string.IsNullOrWhiteSpace(registerDto.Username)
-                    || string.IsNullOrWhiteSpace (registerDto.Password) )
+                    || string.IsNullOrWhiteSpace(registerDto.Password))
 
                 )) return BadRequest(new { Message = $"Please enter correct username and password" });
 
